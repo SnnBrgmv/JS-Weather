@@ -1,12 +1,12 @@
 // Select the search input and search button
 let searchInput = document.querySelector('input');
 let searchBtn = document.querySelector('.search-btn');
-
+const errorMessage = document.getElementById('error-message');
 // Add a click event listener to the search button
 searchBtn.addEventListener('click', () => {
   // Get the value from the search input and trim any whitespace
   let search = searchInput.value.trim();
-
+  errorMessage.textContent = '';
   // Check if the search input is not empty
   if (search !== '') {
     // Fetch weather data using the search value
@@ -43,11 +43,13 @@ async function fetchWeatherData(search) {
     
     icon.innerHTML = `<i class="bi bi-${data.current.condition.icon.split('/').pop().replace('.png', '')}"></i>`;
     temperature.innerHTML = `${data.current.temp_c} <sup>o</sup>C`;
-    windy.textContent = `${data.current.wind_kph} km/h`;
-    humid.textContent = `${data.current.humidity} %`;
-    feelsLike.textContent = `Feels like: ${data.current.feelslike_c} <sup>o</sup>C`;
+    windy.innerHTML = `<i class="bi bi-wind"></i><span>${data.current.wind_kph} km/h</span>`;
+    humid.innerHTML = `<i class="bi bi-water"></i><span>${data.current.humidity} %</span>`;
+    temperature.innerHTML = `${data.current.temp_c} &deg;C`;
+    feelsLike.innerHTML = `Feels like: ${data.current.feelslike_c} <sup>o</sup>C`;
+
     uv.textContent = data.current.uv;
   } catch (error) {
-    console.error(error);
+    errorMessage.textContent = 'City not found. Please try again.';
   }
 }
